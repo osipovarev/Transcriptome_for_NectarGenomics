@@ -1,0 +1,23 @@
+t=liver
+t=pectoralis
+t=heart
+t=duodenum
+
+## Get gene lists
+# BF >= 0.5
+
+## Analyse enrichement Metascape results
+# min overlap = 2; p-val < 0.01; enrichment factor > 1.5
+
+cd Metascape_enrichment
+
+# make file go_enrich.$t.Mnectar.tsv
+cut -f1,3,4,6 go_enrich.$t.Mnectar.tsv > file; mv file go_enrich.$t.Mnectar.tsv
+
+
+for t in liver pectoralis heart duodenum;
+do
+ for go in $(tail -n +2 go_enrich.$t.Mnectar.tsv | cut -f1); do line=$(grep -w "$go" go_enrich.$t.Mnectar.tsv); genes=$(grep -w "$go" $t.metascape/Enrichment_GO/GO_AllLists.csv | head -1 | cut -d, -f16 | sed 's/|/,/g'); echo -e "$line\t$genes"; done > genes.go_enrich.$t.Mnectar.tsv;
+done
+
+

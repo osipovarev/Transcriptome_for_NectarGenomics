@@ -38,6 +38,25 @@ filter_annotation_with_list.py -b -c 4 -a $metaf -l to_exclude_go.lst > noChildr
 
 
 
+### Metascape enrichment 2024.01.17
+
+for t in pectoralis liver heart duodenum; \
+do \
+ echo $t; \
+ for d in up down; \
+ do \
+  f=checked.${d}_${t}.metascape_GO_enrichments.tsv; \
+  golist=$(awk -F"\t" '$11 != ""{print }' $f | cut -f4 | tr '\n' ','); \
+  for g in $(awk -F"\t" '$11 != ""{print }' $f | cut -f4); \
+  do \
+   get_go_children.py -f $GOOBO -go $g -l $golist; done | grep "has parents" | awk '{print $1}' > to_exclude_go.lst; \
+   filter_annotation_with_list.py -c 4 -b -l to_exclude_go.lst -a <(awk -F"\t" '$11 != ""{print }' $f) > noChildren.$f; \
+  done; \
+ done
+
+
+
+
 ## Intraspecies DESeq2
 for t in pectoralis liver; \
 do 

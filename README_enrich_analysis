@@ -1,3 +1,39 @@
+## Correct gene names to hg38 for the enrichment analysis
+
+hg38_dict=~/Documents/LabDocs/NectarivoryProject/absrel/absrel_analysis_2024/galGal6_gene.hg38_gene_symbol.tsv
+
+#########################################
+#                                       #
+#           ClusterProfiler             #
+#                                       #
+#########################################
+
+
+## DESeq2 pairwise
+
+for d in up down; \
+do \
+  for t in pectoralis liver heart duodenum;  \
+  do  \
+    for sp in Annas_hummingbird New_Holland_honeyeater rainbow_lorikeet; \
+    do \
+      renameToHLscaffolds.py -c 1 -a  $d.$sp.$t.top_0.05.txt -d  <(sed 's/\t/,/' $hg38_dict) > hg38.$d.$sp.$t.top_0.05.txt; \
+      goenrich_genelist.R -w $(pwd) -g hg38.$d.$sp.$t.top_0.05.txt -o ClusterProfiler/hg38.goenrich.$d.$sp.$t.top_0.05.tsv; echo -e "$d,$sp,$t"; \
+    done; \
+  done; \
+done
+
+
+
+## Intraspecies
+
+for sp in Annas_hummingbird New_Holland_honeyeater rainbow_lorikeet; do echo $sp; for t in pectoralis liver; do echo $t; renameToHLscaffolds.py -c 1 -a up_${t}_genes_${sp}_not_nonnectar.txt -d  <(sed 's/\t/,/' $hg38_dict) > hg38.up_${t}_genes_${sp}_not_nonnectar.txt; goenrich_genelist.R -w $(pwd) -g hg38.up_${t}_genes_${sp}_not_nonnectar.txt -o ClusterProfiler/hg38.goenrich.up_${t}_genes_${sp}_not_nonnectar.txt; done; done
+
+
+for sp in common_swift zebra_finch cockatiel; do echo $sp; for t in pectoralis liver; do echo $t; renameToHLscaffolds.py -c 1 -a up_${t}_genes_${sp}_not_nectar.txt -d  <(sed 's/\t/,/' $hg38_dict) > hg38.up_${t}_genes_${sp}_not_nectar.txt; goenrich_genelist.R -w $(pwd) -g hg38.up_${t}_genes_${sp}_not_nectar.txt -o ClusterProfiler/hg38.goenrich.up_${t}_genes_${sp}_not_nectar.txt; done; done
+
+
+
 pairs = Annas_hummingbird.common_swift,
          New_Holland_honeyeater.zebra_finch,
          rainbow_lorikeet.cockatiel
@@ -24,6 +60,7 @@ do \
     done > for_metascape.$d.3lists.$t.txt; \
   done; \
 done
+
 
 
 ## Remove children GO terms
@@ -57,7 +94,7 @@ do \
 
 
 
-## Intraspecies DESeq2
+### Intraspecies DESeq2
 for t in pectoralis liver; \
 do 
   for sp in Annas_hummingbird New_Holland_honeyeater rainbow_lorikeet;

@@ -9,7 +9,7 @@ hg38_dict=~/Documents/LabDocs/NectarivoryProject/absrel/absrel_analysis_2024/gal
 #########################################
 
 
-## DESeq2 pairwise
+## enrichGO in DESeq2 pairwise
 
 for d in up down; \
 do \
@@ -24,8 +24,11 @@ do \
 done
 
 
+## remove children in rank 2 
+for f in $(ls rank2.goenrich.*tsv); do echo $f; golist=$(cut -f2 $f | tail +2 | tr '\n' ','); for g in $(cut -f2 $f | tail +2); do get_go_children.py -f $GOOBO -go $g -l $golist ; done | grep "has parents" | awk '{print $1}' > to_exclude_go.lst; wc -l to_exclude_go.lst; filter_annotation_with_list.py -b -c 2 -a $f -l to_exclude_go.lst > noChildren.$f; done;
 
-## Intraspecies
+
+## enrichGO in Intraspecies
 
 for sp in Annas_hummingbird New_Holland_honeyeater rainbow_lorikeet; do echo $sp; for t in pectoralis liver; do echo $t; renameToHLscaffolds.py -c 1 -a up_${t}_genes_${sp}_not_nonnectar.txt -d  <(sed 's/\t/,/' $hg38_dict) > hg38.up_${t}_genes_${sp}_not_nonnectar.txt; goenrich_genelist.R -w $(pwd) -g hg38.up_${t}_genes_${sp}_not_nonnectar.txt -o ClusterProfiler/hg38.goenrich.up_${t}_genes_${sp}_not_nonnectar.txt; done; done
 

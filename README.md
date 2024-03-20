@@ -3,7 +3,6 @@
 #  Pipeline describing DGE analysis after quantification #
 #                                                        #
 ##########################################################
-# NB!! replaced top_palate -> palate in hummingbird samples to be able to run comparisons
 
 ```
 RSCRIPTS=/Users/osipova/Documents/Scripts/rnaseq_tools/

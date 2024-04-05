@@ -42,26 +42,32 @@ Rscript $RSCRIPTS/deseq2_expression_analysis.R \
 ```
 
 
-### run GO enrichment analysis
+### Get genes of interest -> run GO enrichment analysis
 ```
 hg38_dict=~/Documents/LabDocs/NectarivoryProject/absrel/absrel_analysis_2024/galGal6_gene.hg38_gene_symbol.tsv
 
-for sp in Annas_hummingbird New_Holland_honeyeater rainbow_lorikeet;
-do
-	for d in up down; 
-	do
-		echo $d;
-		genes=$d.$sp.multi_deseq2_res.top_0.05.lst;
-		renameToHLscaffolds.py -c 1 -a $genes -d  <(sed 's/\t/,/' $hg38_dict) > hg38.$genes; 
-		goenrich_genelist.R -w $(pwd) -g hg38.$genes -u ../background_genes.all_tissues.txt -o goenrich.hg38.${genes%lst}tsv;
-	done;
+for sp in Annas_hummingbird New_Holland_honeyeater rainbow_lorikeet; \
+do \
+	ref=ref.multi_deseq2_res.$sp.tsv; \
+	interaction=interaction.multi_deseq2_res.tsv; \
+	awk '($7>=0.01 && $3<=1 && $3>=-1){print $1}' $ref > nonsign.${ref%tsv}lst; \
+
+	for d in up down; \
+	do \
+		echo $d; \
+		genes=$sp.multi_deseq2_res.lst; \
+		intersect_multiple_files.py -f <(awk '($7<0.01 && $3>1 ){print $1}' $interaction | grep -v baseMean ) nonsign.${ref%tsv}lst > $d.$genes; \
+
+		renameToHLscaffolds.py -c 1 -a $d.$genes -d <(sed 's/\t/,/' $hg38_dict) > hg38.$d.$genes; \ 
+		goenrich_genelist.R -w $(pwd) -g hg38.$d.$genes -u ../background_genes.all_tissues.txt -o goenrich.hg38.$d.${genes%lst}tsv; \
+	done; \
 done
 ```
 
 
 ## get rank2 sets
 ```
-for g in $(cut -f1 goenrich.hg38.up.*.multi_deseq2_res.top_0.05.tsv | g -v ^ID | s | uniq -c | awk '$1>=2{print $2}'); do grep $g goenrich.hg38.up.Annas_hummingbird.multi_deseq2_res.top_0.05.tsv ; done | cut -f1,2
+for g in $(cut -f1 goenrich.hg38.up.*.multi_deseq2_res.tsv | g -v ^ID | s | uniq -c | awk '$1>=2{print $2}'); do grep $g goenrich.hg38.up.Annas_hummingbird.multi_deseq2_res.tsv ; done | cut -f1,2
 ```
 
 

@@ -51,8 +51,8 @@ do \
 	awk '($7>=0.01 && $3<=2 && $3>=-2){print $1}' $ref > nonsign.${ref%tsv}lst; \
 
 	genes=$sp.multi_deseq2_res.lst; \
-	intersect_multiple_files.py -f <(awk '($7<0.01 && $3>1 ){print $1}' $interaction | grep -v baseMean ) nonsign.${ref%tsv}lst > up.$genes; \
-	intersect_multiple_files.py -f <(awk '($7<0.01 && $3<-1 ){print $1}' $interaction | grep -v baseMean ) nonsign.${ref%tsv}lst > down.$genes; \
+	intersect_multiple_files.py -f <(awk '($7<0.05 && $3>1 ){print $1}' $interaction | grep -v baseMean ) nonsign.${ref%tsv}lst > up.$genes; \
+	intersect_multiple_files.py -f <(awk '($7<0.05 && $3<-1 ){print $1}' $interaction | grep -v baseMean ) nonsign.${ref%tsv}lst > down.$genes; \
 done
 ```
 
@@ -62,7 +62,7 @@ hg38_dict=~/Documents/LabDocs/NectarivoryProject/absrel/absrel_analysis_2024/gal
 for sp in Annas_hummingbird New_Holland_honeyeater rainbow_lorikeet; \
 do \
 	for d in up down; \
-	do
+	do \
 		echo $d; \
 		genes=$sp.multi_deseq2_res.lst; \
 		renameToHLscaffolds.py -c 1 -a $d.$genes -d <(sed 's/\t/,/' $hg38_dict) > hg38.$d.$genes; \ 

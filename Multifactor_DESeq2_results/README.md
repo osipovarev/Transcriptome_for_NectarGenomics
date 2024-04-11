@@ -89,12 +89,29 @@ done
 ```
 
 
-## get rank3 sets
+### get rank3 sets
 ```
-for g in $(cut -f1 goenrich.hg38.up.*.multi_deseq2_res.tsv | g -v ^ID | s | uniq -c | awk '$1>=3{print $2}'); do grep $g goenrich.hg38.up.Annas_hummingbird.multi_deseq2_res.tsv ; done | cut -f1,2
+for d in up down; \
+do \
+	for g in $(cut -f1 goenrich.hg38.down.*multi_deseq2_res.tsv | g -v ^ID | s | uniq -c | awk '$1>=3{print $2}'); \
+	do \
+		grep $g goenrich.hg38.$d.Annas_hummingbird.multi_deseq2_res.tsv ; \
+	done | cut -f1,2 > 3_way_convergent_terms.multi_deseq2.${d}_pectoralis.tsv' \
+done
 ```
-## exclude children
-golist=$(cut -f2 $f | tail +2 | tr '\n' ','); 
-for g in $(cut -f2 $f | tail +2); do get_go_children.py -f $GOOBO -go $g -l $golist ; done | grep "has parents" | awk '{print $1}' > to_exclude_go.lst; wc -l to_exclude_go.lst; filter_annotation_with_list.py -b -c 2 -a $f -l to_exclude_go.lst > noChildren.$f;
 
+
+### exclude children
+```
+GOOBO=/Users/osipova/Documents/LabDocs/GO_terms_genes/go.obo
+golist=$(cut -f2 $f | tail +2 | tr '\n' ',');
+f=3_way_convergent_terms.multi_deseq2.${d}_pectoralis.tsv
+
+for g in $(cut -f2 $f | tail +2); \
+do \
+	get_go_children.py -f $GOOBO -go $g -l $golist ; \
+done | grep "has parents" | awk '{print $1}' > to_exclude_go.lst; 
+wc -l to_exclude_go.lst; 
+filter_annotation_with_list.py -b -c 2 -a $f -l to_exclude_go.lst > noChildren.$f;
+```
 

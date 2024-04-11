@@ -19,11 +19,13 @@ do \
     for sp in Annas_hummingbird New_Holland_honeyeater rainbow_lorikeet; \
     do \
       renameToHLscaffolds.py -c 1 -a  March_2024.$d.$sp.$t.top_0.05.txt -d  <(sed 's/\t/,/' $hg38_dict) > hg38.$d.$sp.$t.top_0.05.txt; \
-      goenrich_genelist.R -w $(pwd) -g hg38.$d.$sp.$t.top_0.05.txt -u ../background_genes.$t.txt -o ClusterProfiler/March_2024.hg38.goenrich.$d.$sp.$t.top_0.05.tsv; echo -e "$d,$sp,$t"; \
+      goenrich_genelist.R -w $(pwd) -g hg38.$d.$sp.$t.top_0.05.txt -u ../background_genes.$t.txt -o ClusterProfiler/March_2024.hg38.goenrich.$d.$sp.$t.top_0.05.tsv; \
+      echo -e "$d,$sp,$t"; \
     done; \
   done; \
 done
 ```
+
 
 ## remove children in rank 2 sets
 ```

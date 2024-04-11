@@ -51,8 +51,25 @@ do \
 	awk '($7>=0.01 && $3<=2 && $3>=-2){print $1}' $ref > nonsign.${ref%tsv}lst; \
 
 	genes=$sp.multi_deseq2_res.lst; \
-	intersect_multiple_files.py -f <(awk '($7<0.05 && $3>1 ){print $1}' $interaction | grep -v baseMean ) nonsign.${ref%tsv}lst > up.$genes; \
+	intersect_multiple_files.py -f <(awk '($7<0.05 && $3> 1 ){print $1}' $interaction | grep -v baseMean ) nonsign.${ref%tsv}lst > up.$genes; \
 	intersect_multiple_files.py -f <(awk '($7<0.05 && $3<-1 ){print $1}' $interaction | grep -v baseMean ) nonsign.${ref%tsv}lst > down.$genes; \
+done
+```
+
+### Alternatively (using it now)
+```
+for sp in Annas_hummingbird New_Holland_honeyeater rainbow_lorikeet; \
+do \
+	ref=ref.multi_deseq2_res.$sp.tsv; \
+	awk '($7<0.01 && ($3<=-2 || $3>=2)){print $1}' $ref > sign.${ref%tsv}lst; \
+done
+
+for sp in Annas_hummingbird New_Holland_honeyeater rainbow_lorikeet; \
+do \
+	interaction=interaction.multi_deseq2_res.$sp.tsv; \
+	genes=$sp.multi_deseq2_res.lst; \
+	filter_annotation_with_list.py -b -c 1 -l sign.ref.multi_deseq2_res.in_any.lst -a <(awk '($7<0.05 && $3>1 ){print $1}' $interaction | grep -v baseMean ) > up.$genes; \
+	filter_annotation_with_list.py -b -c 1 -l sign.ref.multi_deseq2_res.in_any.lst -a <(awk '($7<0.05 && $3<-1 ){print $1}' $interaction | grep -v baseMean ) > down.$genes; \
 done
 ```
 

@@ -111,7 +111,7 @@ for g in $(cut -f2 $f | tail +2); \
 do \
 	get_go_children.py -f $GOOBO -go $g -l $golist ; \
 done | grep "has parents" | awk '{print $1}' > to_exclude_go.lst; 
-wc -l to_exclude_go.lst; 
+
 filter_annotation_with_list.py -b -c 2 -a $f -l to_exclude_go.lst > noChildren.$f;
 ```
 

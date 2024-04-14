@@ -26,7 +26,7 @@ sp1=rainbow_lorikeet
 sp2=cockatiel
 ```
 
-### run multifactorial DESeq2 analysis
+### Run multifactorial DESeq2 analysis
 ```
 Rscript $RSCRIPTS/deseq2_expression_analysis.R \
   -multi \
@@ -41,6 +41,15 @@ Rscript $RSCRIPTS/deseq2_expression_analysis.R \
   -on norm_counts.multi_deseq2_res.$sp1.tsv;
 ```
 
+### Fix headers
+```
+for f in $(ls *multi_deseq2_res.*.tsv);
+do
+ echo $f;
+ sed 's/^baseMean/gene\tbaseMean/' $f > file;
+ mv file $f;
+done
+```
 
 ### Get genes of interest -> run GO enrichment analysis
 ```

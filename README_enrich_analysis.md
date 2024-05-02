@@ -29,8 +29,35 @@ done
 
 ## remove children in rank 2 sets
 ```
-for f in $(ls rank2.goenrich.*tsv); do echo $f; golist=$(cut -f2 $f | tail +2 | tr '\n' ','); for g in $(cut -f2 $f | tail +2); do get_go_children.py -f $GOOBO -go $g -l $golist ; done | grep "has parents" | awk '{print $1}' > to_exclude_go.lst; wc -l to_exclude_go.lst; filter_annotation_with_list.py -b -c 2 -a $f -l to_exclude_go.lst > noChildren.$f; done;
+GOOBO=~/Documents/LabDocs/GO_terms_genes/go.obo
+
+for f in $(ls rank2.goenrich.*tsv); \
+do \
+  echo $f; \
+  golist=$(cut -f2 $f | tail +2 | tr '\n' ','); \
+  for g in $(cut -f2 $f | tail +2); \
+  do \
+    get_go_children.py -f $GOOBO -go $g -l $golist ; \
+  done | grep "has parents" | awk '{print $1}' > to_exclude_go.lst; \
+  wc -l to_exclude_go.lst; \
+  filter_annotation_with_list.py -b -c 2 -a $f -l to_exclude_go.lst > noChildren.$f; \
+done;
 ```
+
+## enrichGO in DESeq2 pairwise genes 2-way convergent 
+```
+for d in up down; \
+do \
+  for t in pectoralis liver heart duodenum palate; \
+  do \
+    do cat $d.*.$t.top_0.05.txt | s | uniq -c | awk '$1>=2{print $2}' > $d.rank2.$t.top_0.05.txt ; \
+    renameToHLscaffolds.py -c 1 -a $d.rank2.$t.top_0.05.txt -d  <(sed 's/\t/,/' $hg38_dict) > hg38.$d.rank2.$t.top_0.05.txt; \
+    goenrich_genelist.R -w $(pwd) -g hg38.$d.rank2.$t.top_0.05.txt -u ../background_genes.$t.txt -o ClusterProfiler/hg38.goenrich.$d.rank2.$t.top_0.05.txt; \
+    echo -e "$d,$sp,$t"; \
+  done; \
+done
+```
+
 
 ## enrichGO in INTRAspecies
 ### nectar
@@ -101,12 +128,12 @@ done
 ```
 GOOBO=~/Documents/LabDocs/GO_terms_genes/go.obo
 
-metaf=metascape.duodenum_down.rank3.tsv
-golist=$(cut -f4 $metaf  | tail +2 | tr '\n' ',')
+f=metascape.duodenum_down.rank3.tsv
+golist=$(cut -f4 $f  | tail +2 | tr '\n' ',')
 
-for g in $(cut -f4 $metaf | tail +2); do get_go_children.py -f $GOOBO -go $g -l $golist ; done | grep "has parents" | awk '{print $1}' > to_exclude_go.lst
+for g in $(cut -f4 $f | tail +2); do get_go_children.py -f $GOOBO -go $g -l $golist ; done | grep "has parents" | awk '{print $1}' > to_exclude_go.lst
 
-filter_annotation_with_list.py -b -c 4 -a $metaf -l to_exclude_go.lst > noChildren.$metaf
+filter_annotation_with_list.py -b -c 4 -a $f -l to_exclude_go.lst > noChildren.$f
 ```
 
 

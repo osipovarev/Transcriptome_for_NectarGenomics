@@ -30,12 +30,13 @@ done
 ## remove children in rank 2 sets
 ```
 GOOBO=~/Documents/LabDocs/GO_terms_genes/go.obo
+c=1
 
 for f in $(ls rank2.goenrich.*tsv); \
 do \
   echo $f; \
-  golist=$(cut -f2 $f | tail +2 | tr '\n' ','); \
-  for g in $(cut -f2 $f | tail +2); \
+  golist=$(cut -f${c} $f | tail -n +2|  tr '\n' ','); \
+  for g in $(echo $golist | tr ',' '\n');  \
   do \
     get_go_children.py -f $GOOBO -go $g -l $golist ; \
   done | grep "has parents" | awk '{print $1}' > to_exclude_go.lst; \

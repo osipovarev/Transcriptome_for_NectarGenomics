@@ -1,6 +1,7 @@
 #  Pipeline describing DGE analysis after quantification #
 
 
+### set up
 ```
 RSCRIPTS=/Users/osipova/Documents/Scripts/rnaseq_tools/
 
@@ -13,7 +14,7 @@ PREFF=''
 SUFF=''
 ```
 
-## Get Salmon/Kallisto quantification results from delta
+## 1. Get Salmon/Kallisto quantification results from delta
 ```
 for l in $(cut -f1 $info | grep -v lib);
 do
@@ -22,7 +23,7 @@ do
 done
 ```
 
-## Get one2one orthologs from delta
+## 2. Get one2one orthologs from delta
 ```
 for db in HLcalAnn5 HLapuApu1 HLphyNov1 HLtriMol2 HLnymHol2 HLtaeGut4;
 do
@@ -32,7 +33,7 @@ done
 ```
 
 
-## Get gene level quantification from Salmon/Kallisto
+## 3. Get gene level quantification from Salmon/Kallisto
 ```
 info=ALL_info.tsv
 
@@ -51,7 +52,7 @@ done
 
 
 
-## Get genes that don't have much variation in effective length for each pair of species; also that are one2ones
+## 4. Get genes that don't have much variation in effective length for each pair of species; also that are one2ones
 ```
 ### set 1
 db1=HLcalAnn5
@@ -78,7 +79,7 @@ sp1=rainbow_lorikeet
 sp2=cockatiel
 ```
 
-## Get counts of one2ones in pairs 
+## 5. Get counts of one2ones in pairs 
 ```
 one2ones=one2ones_${db1}_${db2}.lst
 
@@ -97,7 +98,7 @@ intersect_multiple_files.py -f \
   $one2ones > same_len.$one2ones
 ```
 
-## Filter quant files for genes with little variation in eff length and are one2ones in both species 
+## 6. Filter quant files for genes with little variation in eff length and are one2ones in both species 
 ```
 for l in $(grep "$db1\|$db2" $info | cut -f1);
 do
@@ -110,7 +111,7 @@ done
 ```
 
 
-## Run DESeq2 analysis with R!
+## 7. Run DESeq2 analysis with R!
 
 ### NB!! sp1 = TEST species
 ### NB!! sp2 = REFERENCE species
@@ -133,7 +134,7 @@ Rscript $RSCRIPTS/deseq2_expression_analysis.R \
 done
 ```
 
-## Fix headings
+## 8. Fix headings
 ```
 for f in $(ls deseq2_res.*.tsv);
 do
@@ -144,7 +145,7 @@ done
 ```
 
 
-## Run DESeq2 analysis for INTRAspecies, pectoralis VS liver
+## 9. [optional] Run DESeq2 analysis for INTRAspecies, pectoralis VS liver
 ### NB!! header in ALL_info:   lib samples  type  species  db 
 ```
 for sp in Annas_hummingbird common_swift cockatiel New_Holland_honeyeater zebra_finch rainbow_lorikeet;
@@ -163,7 +164,7 @@ done
 ```
 
 
-## Visualization
+## 10 .Visualization
 can be found in [DESeq2_analysis_nectar.ipynb](https://github.com/osipovarev/Transcriptome_for_NectarGenomics/blob/main/DESeq2_analysis_nectar.ipynb)
 
 next step is:

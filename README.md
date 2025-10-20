@@ -11,6 +11,9 @@ This pipeline describes the following steps:
 
 ## 3. [Funcitonal enrichment analysis with ClusterProfiler](https://github.com/osipovarev/Transcriptome_for_NectarGenomics/blob/main/README_enrich_analysis.md)
 
+## 4. [Expression of candidate genes](https://github.com/osipovarev/Expression_from_counts/blob/main/README.md)
+
+
 ### Scripts
 assocaited scripts can be found [here](https://github.com/osipovarev/rnaseq_tools) or [here](https://github.com/osipovarev/Enrichment_analysis)
 

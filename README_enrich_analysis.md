@@ -1,13 +1,9 @@
+# Funtional enrichment analysis with ClusterProfiler
+
 ### Correct gene names to hg38 for the enrichment analysis
 ```
 hg38_dict=~/Documents/LabDocs/NectarivoryProject/absrel/absrel_analysis_2024/galGal6_gene.hg38_gene_symbol.tsv
 ```
-
-#########################################
-#                                       #
-#           ClusterProfiler             #
-#                                       #
-#########################################
 
 
 ## enrichGO in DESeq2 pairwise

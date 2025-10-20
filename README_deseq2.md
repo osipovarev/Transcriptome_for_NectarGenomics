@@ -163,5 +163,8 @@ done
 ```
 
 
+## Visualization
+can be found in [DESeq2_analysis_nectar.ipynb](https://github.com/osipovarev/Transcriptome_for_NectarGenomics/blob/main/DESeq2_analysis_nectar.ipynb)
 
-
+next step is:
+## [Multifactorial differential gene expression analysis with DESeq2](https://github.com/osipovarev/Transcriptome_for_NectarGenomics/blob/main/Multifactor_DESeq2_results/README.md)

@@ -80,5 +80,5 @@ done
 para make -memoryMb 200000 jobs.kallisto.qunat jobs.kallisto.qunat.$i
 ```
 
-
-
+the next step is: 
+## [Differential gene expression analysis with DESeq2](https://github.com/osipovarev/Transcriptome_for_NectarGenomics/blob/main/README_deseq2.md)

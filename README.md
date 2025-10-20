@@ -6,5 +6,12 @@ This pipeline describes the following steps:
 ## 1. [Gene expresison quantification with Kallisto](https://github.com/osipovarev/Transcriptome_for_NectarGenomics/blob/main/README_kallisto.md)
 
 ## 2. [Differential gene expression analysis with DESeq2](https://github.com/osipovarev/Transcriptome_for_NectarGenomics/blob/main/README_deseq2.md)
+ - simple pairwise DGE analysis
+ - multifactorial DGE analysis 
 
 ## 3. [Funcitonal enrichment analysis with ClusterProfiler](https://github.com/osipovarev/Transcriptome_for_NectarGenomics/blob/main/README_enrich_analysis.md)
+
+***
+
+Additional:
+### [Recovering candidates genes](https://github.com/osipovarev/Transcriptome_for_NectarGenomics/blob/main/README_missing_genes_reason.md) 
